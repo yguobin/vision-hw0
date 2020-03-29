@@ -8,7 +8,7 @@ int same_image(image a, image b){
     int i;
     if(a.w != b.w || a.h != b.h || a.c != b.c) return 0;
     for(i = 0; i < a.w*a.h*a.c; ++i){
-//if(!within_eps(a.data[i], b.data[i])) printf("%d %f %f\n", i, a.data[i], b.data[i]);
+	//if(!within_eps(a.data[i], b.data[i])) printf("%d %d %d %f %f\n", a.h, a.w, i, a.data[i], b.data[i]);
         if(!within_eps(a.data[i], b.data[i])) return 0;
     }
     return 1;
@@ -83,9 +83,23 @@ void test_hsv_to_rgb()
 {
     image im = load_image("data/dog.jpg");
     image c = copy_image(im);
+    //printf("%f %f %f\n", get_pixel(im, 754, 0, 0), get_pixel(im, 754, 0, 1), get_pixel(im, 754, 0, 2)); 
     rgb_to_hsv(im);
+    //printf("%f %f %f\n", get_pixel(im, 754, 0, 0), get_pixel(im, 754, 0, 1), get_pixel(im, 754, 0, 2)); 
     hsv_to_rgb(im);
+    //printf("%f %f %f\n", get_pixel(im, 754, 0, 0), get_pixel(im, 754, 0, 1), get_pixel(im, 754, 0, 2)); 
     TEST(same_image(im, c));
+}
+
+void test_sample_to_rgb()
+{
+    image im = make_image(1, 1, 3);
+    set_pixel(im, 0, 0, 0, 0.5), set_pixel(im, 0, 0, 1, 0.5), set_pixel(im, 0, 0, 2, 0.25);
+//    image c = copy_image(im);
+//    rgb_to_hsv(im);
+    hsv_to_rgb(im);
+    printf("%.2f, %.2f, %.2f\n", get_pixel(im, 0, 0, 0), get_pixel(im, 0, 0, 1), get_pixel(im, 0, 0, 2));
+//    TEST(same_image(im, c));
 }
 
 int do_test()
@@ -105,6 +119,7 @@ void run_tests()
     test_rgb_to_hsv();
     test_hsv_to_rgb();
     printf("%d tests, %d passed, %d failed\n", tests_total, tests_total-tests_fail, tests_fail);
+//    test_sample_to_rgb();
 }
 
 int main(int argc, char **argv)
